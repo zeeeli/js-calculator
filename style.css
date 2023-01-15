@@ -1,0 +1,122 @@
+* {
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: grid;
+    grid-auto-rows: minmax(50px, auto);
+    gap: 10px;
+    grid-template-areas: 
+        "C DEL plus-minus div"
+        "seven eight nine mult"
+        "four five six sub"
+        "one two three add"
+        "dec zero equals equals";
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* GRID TEMPLATE DECLERACTIONS */
+
+#clear {
+    grid-area: C;
+}
+
+#delete {
+    grid-area: DEL;
+}
+
+#divide {
+    grid-area: div;
+}
+
+#multiply {
+    grid-area: mult;
+}
+
+#add {
+    grid-area: add;
+}
+
+#subtraction {
+    grid-area: sub;
+}
+
+#plus-minus {
+    grid-area: plus-minus;
+}
+
+#decimal {
+    grid-area: dec;
+}
+
+#equals {
+    grid-area: equals;
+}
+
+
+#btn-9 {
+grid-area: nine;
+}
+
+#btn-8 {
+    grid-area: eight;
+}
+
+#btn-7 {
+    grid-area: seven;
+}
+
+#btn-6 {
+    grid-area: six;
+}
+#btn-5 {
+    grid-area: five;
+}
+#btn-4 {
+    grid-area: four;
+}
+#btn-3 {
+    grid-area: three;
+}
+#btn-2 {
+    grid-area: two;
+}
+#btn-1 {
+    grid-area: one;
+}
+#btn-0 {
+    grid-area: zero;
+}
+
+
+
+
+
+
+
+
