@@ -2,40 +2,96 @@
     box-sizing: border-box;
 }
 
-.buttons {
+body {
+    margin: 0;
+    background-color: #222831;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    background-color: #393e46;
+    width: 350px;
+    height: 600px;
+    border-radius: 25px;
+    box-shadow: 0px 25px 20px -20px rgba(0, 0, 0, 0.45), 25px 0 20px -20px rgba(0, 0, 0, 0.45);
+
+
+
+
+}
+
+
+#display {
+    align-self: center;
+    height: 120px;
+    width: 300px;
+
+}
+
+#buttons {
+    align-self: center;
     display: grid;
     grid-auto-rows: minmax(50px, auto);
-    gap: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 300px;
+    height: 400px;
     grid-template-areas: 
         "C DEL plus-minus div"
         "seven eight nine mult"
         "four five six sub"
         "one two three add"
-        "dec zero equals equals";
-
-    
+        ". dec zero equals";   
 }
 
+#buttons > button {
+    background: transparent;
+    font-size: 30px;
+    color: #f2f2f2;
+    padding: 0;
+    border: #393e46;
 
+}
 
+#buttons > button:hover {
+    color: #f96d00;
+    box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+    transform: translateY(-0.1em);
+}
 
+#buttons > button:active {
+    color: #f96d00;
+    transform: translateY(0.1em);;
+}
 
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    height: 10vh;
+}
 
+#footer-text > a{
+    color: #f2f2f2;
+    text-decoration: none;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#footer-image > a > img {
+    max-width: 50px;
+    height: auto;
+}
 
 
 
