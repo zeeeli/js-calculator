@@ -1,5 +1,7 @@
 const activeDisplay = document.querySelector('#active');
+const storedDisplay = document.querySelector('#stored');
 const buttons = document.querySelectorAll('#buttons > button');
+const nonNumerics = ['+', '-', 'x', '÷'];
 
 function add(a, b) {return a + b;}
 function sub(a, b) {return a - b;}
@@ -7,74 +9,140 @@ function mul(a, b) {return a * b;}
 function div(a, b) {return a / b;}
 
 function operate(operator, a , b){
+    let result;
     switch (operator) {
         case '+':
-            add(a, b);
+            result = add(a, b);
             break;
         case '-':
-            sub(a, b);
+            result = sub(a, b);
             break;
-        case '*':
-            mul(a, b);
+        case 'x':
+            result = mul(a, b);
             break;
-        case '/':
-            div(a, b);
+        case '÷':
+            result = div(a, b);
             break;
         default:
             break;
     }
+    return result;
 }
 
 function equalityHandler(){
-    const nonNumerics = ['+', '-', 'x', '÷'];
-    let operator, newString, a, b;
+    let operator, newString, a, b, result;
     
+    // display value in the storedDisplay
+    storedDisplay.textContent = activeDisplay.textContent + ' =';
+
     // get the active operator
     for (let i = 0; i < nonNumerics.length; i++) {
         const element = nonNumerics[i];
-        if (activeDisplay.textContent.includes(element)) {
+        if (activeDisplay.textContent.slice(1).includes(element)) {
             operator = element;
         }        
     }
-    
-    // split string to have both operands
-    newString = activeDisplay.textContent.replaceAll(' ', '');
-    [a, b] = newString.split(operator);
-    console.log(a);
-    console.log(b);
-    
-    
 
+    if (operator === undefined) {
+        result = activeDisplay.textContent;
+        result = Number(result).toFixed(2);
+        result = result.replace(/\.00$/, '');
+        activeDisplay.textContent = result;
+        return;
+    }else{
+
+        // split string to have both operands
+        newString = activeDisplay.textContent.replaceAll(' ', '');
+        [a, b] = newString.split(operator);
+        a = Number(a);
+        b = Number(b);
+
+        // get and display result of operation
+        result = operate(operator, a, b);
+        result = Number(result).toFixed(2);
+        result = result.replace(/\.00$/, '');
+        activeDisplay.textContent = result;
+    }
+    
 
 }
 
-function displayActiveInput(input){
-    const nonNumerics = ['+', '-', 'x', '÷'];
-    if (!isNaN(input)) {
+function decimalHandler(input){
+    let activeOperation = null;
+    for (let i = 0; i < nonNumerics.length; i++) {
+        if (activeDisplay.textContent.slice(1).includes(nonNumerics[i])) {
+            activeOperation = nonNumerics[i];
+        }
+    }   
+    if(!activeDisplay.textContent.includes('.')){
+        activeDisplay.textContent+=input;
+    }else if (activeOperation !== null) {
+        if (!activeDisplay.textContent.split(activeOperation)[1].includes('.')) {
+            activeDisplay.textContent+=input;                        
+        }
+    }
 
-        // limit size of display number before using scientific notation
-        if (Number(activeDisplay.textContent) >= 1.0e10){
-            activeDisplay.textContent = Number(activeDisplay.textContent).toExponential(2);;
+}
+
+function deleteHandler(){
+
+    // delete operator (w/ whitespace) when present
+    if(activeDisplay.textContent.charAt(activeDisplay.textContent.length - 1) === ' '){
+        activeDisplay.textContent = activeDisplay.textContent.slice(0, -2);
+    }
+
+    // delete last character in activeDisplay
+    activeDisplay.textContent = activeDisplay.textContent.slice(0, -1);
+
+    //check if activeDisplay is empty after deletion operation and replace empty string with '0'
+    if (activeDisplay.textContent.length === 0) {activeDisplay.textContent  = '0';}
+}
+
+function plusMinusHandler(){
+    if (activeDisplay.textContent.charAt(0) === '-') {
+        activeDisplay.textContent = activeDisplay.textContent.slice(1);
+    }else if (activeDisplay.textContent.charAt(0) === '0') {
+        return;
+    }else{
+        activeDisplay.textContent = '-' + activeDisplay.textContent;
+    }
+}
+
+function operatorHandler(input){
+    // don't allow multiple operations to be inputted on activeDisplay except for prefix '-'
+    for (let i = 0; i < nonNumerics.length; i++) {
+        if (activeDisplay.textContent.slice(1).includes(nonNumerics[i])) {
+            equalityHandler();
+            activeDisplay.textContent += (' ' + input + ' ')
             return;
         }
+    }      
+    activeDisplay.textContent += (' ' + input + ' ');
+}
 
+function clearCalculator(){
+    activeDisplay.textContent = '0';
+    storedDisplay.textContent = '';
+}
+
+function displayActiveInput(input){
+    if (!isNaN(input)) {
         // set input character limit to 10 and replace 10th value with every new input
         if (activeDisplay.textContent.length >= 14) {
             return;
         }
 
+        // replace default 0 with input rather then appending the input
         if (activeDisplay.textContent === '0' && activeDisplay.textContent.length === 1) {
             activeDisplay.textContent = input;
         }else{
             activeDisplay.textContent+=input;
         }
-        
+
     }else {
         switch (input) {
             case '.':
-                if(!activeDisplay.textContent.includes('.')){
-                    activeDisplay.textContent+=input;
-                }
+                decimalHandler(input);
                 break;
 
             case 'C':
@@ -82,60 +150,34 @@ function displayActiveInput(input){
                 break;
 
             case 'DEL':
-                // delete full scientific notation when present
-                if (activeDisplay.textContent.includes('e')) {
-                    activeDisplay.textContent = activeDisplay.textContent.split('e')[0];
-                }
-
-                // delete operator (w/ whitespace) when present
-                if(activeDisplay.textContent.charAt(activeDisplay.textContent.length - 1) === ' '){
-                    activeDisplay.textContent = activeDisplay.textContent.slice(0, -2);
-                }
-
-                // delete last character in activeDisplay
-                activeDisplay.textContent = activeDisplay.textContent.slice(0, -1);
-
-                //check if activeDisplay is empty after deletion operation and replace empty string with '0'
-                if (activeDisplay.textContent.length === 0) {activeDisplay.textContent  = '0';}
-
+                deleteHandler();
                 break;
 
             case '+/-':
-                if (activeDisplay.textContent.charAt(0) === '-') {
-                    activeDisplay.textContent = activeDisplay.textContent.slice(1);
-                }else{
-                    activeDisplay.textContent = '-' + activeDisplay.textContent;
-                }
+                plusMinusHandler();
                 break;
 
             case '÷':
             case 'x':
             case '-':
             case '+':
-                // don't allow multiple operations to be inputted on activeDisplay
-                for (let i = 0; i < nonNumerics.length; i++) {
-                    if (activeDisplay.textContent.includes(nonNumerics[i])) {return;}
-                }          
-                activeDisplay.textContent += (' ' + input + ' ');
+                operatorHandler(input);
                 break;
 
             case '=':
                 equalityHandler();
                 break;
+
             default:
                 break;
         }
     }
-    // console.log(activeDisplay.textContent)
 }
 
-
-
-
-
-let input;
-
-buttons.forEach(button => button.addEventListener('click', () => {
+window.onload = () => {
+    let input;
+    buttons.forEach(button => button.addEventListener('click', () => {
     input = button.textContent;
     displayActiveInput(input);
-}));
+    }));
+}
