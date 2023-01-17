@@ -177,7 +177,19 @@ function displayActiveInput(input){
 window.onload = () => {
     let input;
     buttons.forEach(button => button.addEventListener('click', () => {
-    input = button.textContent;
-    displayActiveInput(input);
+        input = button.textContent;
+        displayActiveInput(input);
     }));
+
+    document.addEventListener('keyup', (event) => {
+        let target = event.keyCode;
+        keyMap = { 96:  '0', 97:  '1', 98:  '2', 99:  '3', 100: '4',
+                   101: '5', 102: '6', 103: '7', 104: '8', 105: '9',
+                   106: 'x', 107: '+', 109: '-', 110: '.', 111: '÷',
+                   13:  '=', 61:  '=', 8: 'DEL', 67: 'C', 80: '+/-',
+                   68:  '÷',
+        }
+        input = keyMap[target];
+        displayActiveInput(input);
+    })
 }
